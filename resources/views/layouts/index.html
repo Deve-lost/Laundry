@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src='https://cdn.tiny.cloud/1/9r22aawjna4i5xiq305h1avqyndi0pzuxu0aysqdgkijvnwh/tinymce/5/tinymce.min.js' referrerpolicy="origin"></script>
+  <script>
+  tinymce.init({
+    selector: '#mytextarea'
+  });
+  </script>
+</head>
+<body>
+<h1>TinyMCE Quick Start Guide</h1>
+  <form method="post">
+    <textarea id="mytextarea" name="mytextarea">Hello, World!</textarea>
+  </form>
+</body>
+</html>
+
+
+
+
+<div class="modal fade text-left" id="form-edit" tabindex="-1" role="dialog" aria-labelledby="form-edit-outlet" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary white">
+        <h4 class="modal-title" id="form-edit-outlet">Tambah Data</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <form method="POST" novalidate>
+            @csrf
+            {{ method_field('POST') }}
+          <div class="modal-body">
+                <input type="hidden" id="id" name="id">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="namaOutlet">Nama Outlet</label>
+                            <div class="controls">
+                                <input type="text" name="nama" class="form-control" required
+                                    data-validation-required-message="Nama Outlet Harus Diisi" placeholder="Masukkan Nama Outlet" id="namaOutlet">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pemilik">Nama Pemilik Outlet</label>
+                            <div class="controls">
+                                <input type="text" name="nama_owner" class="form-control" required
+                                    data-validation-required-message="Nama Pemilik Outlet Harus Diisi" placeholder="Masukkan Nama Pemilik Outlet" id="pemilik">
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="Uhide">
+                            <label for="Username">Username</label>
+                            <div class="controls">
+                                <input type="text" name="username" class="form-control" required
+                                    data-validation-required-message="Username Harus Diisi" placeholder="Masukkan Username" id="Username" value="">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="noTelpon">No. Telpon Outlet</label>
+                            <div class="controls">
+                                <input type="number" name="tlp" class="form-control" required
+                                    data-validation-required-message="No. Telpon Outlet Harus Diisi" placeholder="Masukkan No. Telpon Outlet" id="noTelpon">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="alamat">Alamat Outlet</label>
+                            <div class="controls">
+                                <textarea name="alamat" id="alamat" class="form-control" required="" placeholder="Masukkan Alamat Outlet" data-validation-required-message="Alamat Outlet Harus Diisi" aria-invalid="true" rows="5"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-outline-primary"><i class="icon-paper-plane"></i> Simpan</button>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+<!-- Xample Tambah Transaksi -->
+@extends('layouts.master')
+
+@section('title','Tambah Transaksi')
+
+@section('css')
+{{-- <link rel="stylesheet" type="text/css" href="{{asset('admin/app-assets/css/plugins/forms/validation/form-validation.css')}}"> --}}
+<link rel="stylesheet" type="text/css" href="{{asset('admin/app-assets/vendors/css/forms/selects/select2.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('admin/app-assets/vendors/css/pickers/daterange/daterangepicker.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('admin/app-assets/vendors/css/pickers/datetime/bootstrap-datetimepicker.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('admin/app-assets/vendors/css/pickers/pickadate/pickadate.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('admin/app-assets/vendors/css/forms/icheck/icheck.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('admin/app-assets/vendors/css/forms/icheck/custom.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('admin/app-assets/css/plugins/forms/checkboxes-radios.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('admin/app-assets/vendors/css/forms/toggle/switchery.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('admin/app-assets/css/pages/app-invoice.min.css')}}">
+@stop
+
+@section('content')
+<div class="invoice-add-wrapper">
+  <div class="row">
+    <div class="col-xl-12 col-md-12 col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-header">
+            <span class="invoice-text font-weight-bold">Tambah Transaksi </span>
+          </div>
+          <hr>
+          <form action="{{ route('transaksi.store') }}" method="POST">
+            @csrf
+            <div class="row my-2">
+              <div class="col-sm-6 col-12 order-2 order-sm-1">
+                <label for="outlet">Outlet</label>
+                 <select class="form-control select2" name="id_outlet" id="outlet" style="width: 100%;">
+                      <optgroup label="Nama Outlet">
+                          <option readonly value="0">-- Pilih Outlet --</option>
+                          @forelse($outlet as $jquinO)
+                          <option value="{{ $jquinO->id }}">{{ $jquinO->nama }}</option>
+                          @empty
+                          <option disabled="">-- Tidak Ada Outlet --</option>
+                          @endforelse
+                      </optgroup>
+                  </select>
+              </div>
+
+              <div class="col-sm-6 col-12 order-2 order-sm-1">
+                  <label for="id_member">Pelanggan</label>
+                  <select class="form-control select2" name="id_member" style="width: 100%;">
+                      <optgroup label="Nama Pelanggan">
+                          <option readonly="" value="0">-- Pilih Pelanggan --</option>
+                          @forelse($pelanggan as $jquinP)
+                          <option value="{{ $jquinP->id }}">{{ $jquinP->nama }}</option>
+                          @empty
+                          <option disabled="">-- Tidak Ada Pelanggan --</option>
+                          @endforelse
+                      </optgroup>
+                  </select>
+              </div>
+            </div>
+            <hr>
+
+            <!-- bill address section -->
+            <div class="row my-2">
+              <div class="col-sm-6 col-12 order-2 order-sm-1">
+                  <label for="batas_waktu">Batas Waktu Pengambilan</label>
+                  <div class="input-group">
+                      <input type='text' class="form-control pickadate-selectors" name="batas_waktu" placeholder="Batas Waktu Pengambilan" required=""/>
+                      <div class="input-group-append">
+                          <span class="input-group-text">
+                              <span class="fa fa-calendar-o"></span>
+                          </span>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="col-sm-6 col-12 order-2 order-sm-1">
+                  <label for="tgl_pembayaran">Tanggal Pembayaran</label>
+                  <div class="input-group">
+                      <input type='text' class="form-control pickadate-selectors" name="tgl_bayar" placeholder="Tanggal Pembayaran"/>
+                      <div class="input-group-append">
+                          <span class="input-group-text">
+                              <span class="fa fa-calendar-o"></span>
+                          </span>
+                      </div>
+                  </div>
+              </div>
+            </div>
+
+            <div class="row my-2">
+              <div class="col-sm-6 col-12 order-2 order-sm-1">
+                  <label for="biaya_tambahan">Biaya Tambahan</label>
+                  <input type="number" class="form-control" id="biaya_tambahan" name="biaya_tambahan" placeholder="Biaya Tambahan">
+              </div>
+
+              <div class="col-sm-6 col-12 order-2 order-sm-1">
+                  <label for="diskon">Diskon (%)</label>
+                  <input type="number" class="form-control" id="diskon" name="diskon" placeholder="Diskon" max="100">
+              </div>
+            </div>
+
+            <div class="row my-2">
+              <div class="col-sm-6 col-12 order-2 order-sm-1">
+                  <label for="pajak">Pajak</label>
+                  <input type="number" class="form-control" id="pajak" name="pajak" placeholder="Pajak">
+              </div>
+
+              <div class="col-sm-6 col-12 order-2 order-sm-1">
+                  <label for="status">Status Pesanan</label>
+                  <select class="custom-select block" name="status" id="status" required >
+                      <option value="baru">Baru</option>
+                      <option value="proses">Proses</option>
+                      <option value="selesai">Selesai</option>
+                      <option value="diambil">Diambil</option>
+                  </select>
+              </div>
+            </div>
+
+            <div class="row my-2 skin skin-square">
+              <div class="col-sm-6 col-12 order-2 order-sm-1">
+                  <label for="dibayar">Status Pembayaran</label>
+                  <fieldset>
+                    <input type="radio" name="dibayar" id="dibayar" value="dibayar" required>
+                    <label for="dibayar">Dibayar</label>&nbsp;&nbsp;&nbsp;
+                    <input type="radio" name="dibayar" id="belum_dibayar" value="belum_dibayar">
+                    <label for="belum_dibayar">Belum Dibayar</label>
+                  </fieldset>
+              </div>
+            </div>
+            <hr>
+
+            <div class="repeater-default">
+              <div data-repeater-list="repeatJquin">
+                  <div data-repeater-item>
+                      <div class="form row">
+                          <div class="form-group mb-1 col-sm-12 col-md-2">
+                              <label for="paket">Paket</label>
+                              <br>
+                              <select class="form-control" name="nama_paket" id="paket" class="nama_paket">
+                                <option>-- Pilih Paket --</option>
+                              </select>
+                              <input type="hidden" name="id_paket" id="id_paket">
+                              <input type="text" name="cobaForm">
+                          </div>
+                          <div class="form-group mb-1 col-sm-12 col-md-2">
+                              <label for="jenis">Jenis Cucian</label>
+                              <br>
+                               <select class="form-control" id="jenis">
+                                <option>-- Pilih Cucian --</option>
+                              </select>
+                          </div>
+                          <div class="form-group mb-1 col-sm-12 col-md-2">
+                              <label for="jmlCucian" class="cursor-pointer">Jumlah Cucian</label>
+                              <br>
+                              <input type="number" class="form-control" name="qty" id="jmlCucian" placeholder="1" required>
+                          </div>
+                          <div class="skin skin-flat form-group mb-1 col-sm-4 col-md-2">
+                              <label for="harga">Harga</label>
+                              <br>
+                              <p class="form-control-static" id="harga">Rp. 0</p>
+                          </div>
+                          <div class="skin skin-flat form-group mb-1 col-sm-12 col-md-2">
+                              <label for="keterangan">Keterangan</label>
+                              <br>
+                              <textarea name="keterangan" id="keterangan" rows="2" class="form-control"></textarea>
+                          </div>
+                          <div class="form-group col-sm-12 col-md-2 text-center mt-2">
+                              <button type="button" class="btn btn-danger" data-repeater-delete> <i class="icon-close"></i> Hapus</button>
+                          </div>
+                      </div>
+                      <hr>
+                  </div>
+              </div>
+              <div class="form-group overflow-hidden">
+                  <div class="col-12">
+                      <button data-repeater-create type="button" class="btn btn-primary">
+                          <i class="icon-plus"></i> Tambah Cucian
+                      </button>
+                  </div>
+              </div>
+            </div>
+            <hr>
+
+            <!-- invoice bill total -->
+            <div class="invoice-total">
+              <div class="row">
+                <div class="col-12 col-md-6 col-lg-6 col-xl-5">
+                  <!-- Coming Soon! -->
+                </div>
+                <div class="col-12 col-md-6 col-lg-6 col-xl-5 offset-xl-2">
+                  <ul class="list-group cost-list">
+                    <li class="list-group-item each-cost border-0 p-50 d-flex justify-content-between">
+                      <span class="cost-title mr-2">Total Harga </span>
+                      <span class="cost-value">$ 00.00</span>
+                    </li>
+                    <li class="list-group-item each-cost border-0 p-50 d-flex justify-content-between">
+                      <span class="cost-title mr-2">Diskon </span>
+                      <span class="cost-value">-$ 00.00</span>
+                    </li>
+                    <li class="dropdown-divider"></li>
+                    <li class="list-group-item each-cost border-0 p-50 d-flex justify-content-between">
+                      <span class="cost-title mr-2">Total Bayar </span>
+                      <span class="cost-value">$ 00.00</span>
+                    </li>
+                  </ul>
+                  <button type="submit" class="btn btn-primary mt-1 btn-block">Simpan</button>
+                </div>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+@stop
+
+@section('footer')
+<script src="{{asset('admin/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js')}}"></script>
+<script src="{{asset('admin/app-assets/js/scripts/forms/validation/form-validation.js')}}"></script>
+<script src="{{asset('admin/app-assets/vendors/js/forms/select/select2.full.min.js')}}"></script>
+<!-- DateTimePicker -->
+<script src="{{asset('admin/app-assets/vendors/js/pickers/dateTime/moment-with-locales.min.js')}}"></script>
+<script src="{{asset('admin/app-assets/vendors/js/pickers/dateTime/bootstrap-datetimepicker.min.js')}}"></script>
+<script src="{{asset('admin/app-assets/vendors/js/pickers/pickadate/picker.js')}}"></script>
+<script src="{{asset('admin/app-assets/vendors/js/pickers/pickadate/picker.date.js')}}"></script>
+<script src="{{asset('admin/app-assets/vendors/js/pickers/pickadate/picker.time.js')}}"></script>
+<script src="{{asset('admin/app-assets/vendors/js/pickers/pickadate/legacy.js')}}"></script>
+<script src="{{asset('admin/app-assets/vendors/js/pickers/daterange/daterangepicker.js')}}"></script>
+<script src="{{asset('admin/app-assets/js/scripts/pickers/dateTime/bootstrap-datetime.min.js')}}"></script>
+<script src="{{asset('admin/app-assets/js/scripts/pickers/dateTime/pick-a-datetime.min.js')}}"></script>
+<!-- Radio -->
+<script src="{{asset('admin/app-assets/vendors/js/forms/repeater/jquery.repeater.min.js')}}"></script>
+<script src="{{asset('admin/app-assets/js/scripts/forms/form-repeater.min.js')}}"></script>
+<script src="{{asset('admin/app-assets/vendors/js/forms/icheck/icheck.min.js')}}"></script>
+<script src="{{asset('admin/app-assets/js/scripts/forms/checkbox-radio.min.js')}}"></script>
+
+<!-- Invoice -->
+<script src="{{asset('admin/app-assets/js/scripts/pages/app-invoice.min.js')}}"></script>
+
+<!-- Dynamic Dropdown -->
+<script>
+  jQuery(function () {
+      // Custom Select Option
+      $(".select2").select2();
+
+        // Deklarasi Var Global
+        var kodePaketClick; //id_outlet
+
+        // Cari Paket
+         $('#outlet').on('change', function(e){
+            console.log(e);
+            var outlet_id = e.target.value;
+            kodePaketClick = outlet_id;
+
+            $.get('/json/cari-paket/' + outlet_id,function(data) {
+              console.log(data);
+              $('#paket').empty();
+              $('#paket').append('<option value="0" disable="true" selected="true">-- Pilih Paket --</option>');
+
+              $.each(data, function(index, paketObj){
+                console.log(paketObj);
+                $('#paket').append('<option value="'+ paketObj.nama_paket +'">'+ paketObj.nama_paket +'</option>');
+              })
+            });
+          });
+
+         // Cari Jenis Paket
+         $('#paket').on('change', function(e){
+            console.log(e);
+            var namaPaket = e.target.value;
+            console.log(namaPaket);
+            console.log(kodePaketClick);
+            
+            $.get('/json/cari-jenis/'+ kodePaketClick +'/'+ namaPaket,function(data) {
+              console.log(data);
+              $('#jenis').empty();
+              $('#jenis').append('<option value="0" disable="true" selected="true">-- Pilih Cucian --</option>');
+
+              $.each(data, function(index, jenisObj){
+                $('#jenis').append('<option value="'+ jenisObj.id +'">'+ jenisObj.jenis +'</option>');
+              })
+            });
+          });
+
+         // Cari Harga
+         $('#jenis').on('change', function(e){
+            console.log(e);
+            var harga = e.target.value;
+            
+            $.get('/json/cari-harga/'+ harga,function(data) {
+              console.log(data);
+              $('#harga').empty();
+
+              $.each(data, function(index, harga){
+                $('#harga').append('<span> Rp. '+ harga.harga + '/' + harga.jenis +'</span>');
+              })
+              // Id_paket untuk tb_detail_paket
+              $('#id_paket').val(data[0]['id']);
+            });
+          });
+
+         // Form Repeat
+         $('.form row').repeater({
+            initEmpty: true,
+            defaultValues: {
+                'cobaForm': 'coba'
+            },
+            show: function () {
+                $(this).slideDown();
+            },
+            hide: function (deleteElement) {
+                if(confirm('Are you sure you want to delete this element?')) {
+                    $(this).slideUp(deleteElement);
+                }
+            },
+            ready: function (setIndexes) {
+                // $dragAndDrop.on('drop', setIndexes);
+            },
+            isFirstItemUndeletable: true
+        })
+    });
+</script>
+@stop
+
+<br>
+<form action="">
+  <input type="date">
+</form>
+
+<!-- Laporan -->
+<section class="users-list-wrapper">
+    <div class="users-list-filter px-1" id="cariData">
+        <form>
+          @csrf
+          {{ method_field('GET') }}
+            <div class="row border border-light rounded py-2 mb-2">
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <label for="tanggalDari">Tanggal - Dari</label>
+                    <fieldset class="form-group">
+            <div class='input-group'>
+              <input type='date' name="tanggalDari" class="form-control" />
+              <div class="input-group-append">
+                <span class="input-group-text">
+                  <span class="fa fa-calendar"></span>
+                </span>
+              </div>
+            </div>
+                    </fieldset>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <label for="tanggalSampai">Tanggal - Sampai</label>
+                    <fieldset class="form-group">
+            <div class='input-group'>
+              <input type='date' name="tanggalSampai" class="form-control" />
+              <div class="input-group-append">
+                <span class="input-group-text">
+                  <span class="fa fa-calendar"></span>
+                </span>
+              </div>
+            </div>
+          </fieldset>
+                </div>
+                <div class="col-12 col-sm-4 col-lg-3">
+                    <label for="outlet">Outlet</label>
+                    <fieldset class="form-group">
+                        <select class="form-control" id="outlet">
+                            <option value="">Any</option>
+                            <option value="Active">Active</option>
+                            <option value="Close">Close</option>
+                            <option value="Banned">Banned</option>
+                        </select>
+                    </fieldset>
+                </div>
+                <div class="col-12 col-sm-2 col-lg-2">
+                    <label for="status">Status</label>
+                    <fieldset class="form-group">
+                        <select class="form-control" id="status">
+                            <option value="*">Semua</option>
+                            <option value="baru">Baru</option>
+                            <option value="proses">Proses</option>
+                            <option value="selesai">Selesai</option>
+                            <option value="diambil">Diambil</option>
+                        </select>
+                    </fieldset>
+                </div>
+                <div class="col-12 col-sm-3 col-lg-1 d-flex align-items-center">
+                    <button type="submit" class="btn btn-block btn-primary glow">Cari</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
