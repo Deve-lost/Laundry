@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Transaksi;
 use App\Outlet;
+use App\Outlet_User;
 use Yajra\DataTables\Datatables;
 use DB;
 use App\Exports\LaporanExport;
@@ -20,44 +21,30 @@ class LaporanController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->has('q')) {
-            $laporan = Transaksi::orderBy('tgl','DESC')->get();
-            
-            if ($request->q) {
-                $laporan = $laporan->where('tgl', '>=', $request->q);
-            }
-
-            // if ($request->s) {
-            //     $laporan = $laporan->where('batas_waktu', '<=', $request->s);
-            // }
-
-            if ($request->o) {
-                if ($request->o != 'Semua') {
-                    $laporan = $laporan->where('id_outlet', $request->o);
-                } else {
-                    $o = $laporan;
-                }
-            }
-
-            if ($request->st) {
-                if ($request->st != 'Semua') {
-                    $st = $request->st;
-                    $laporan = $laporan->where('status', $request->st);
-                } else {
-                    $st = $laporan;
-                }
-            }
+        if (auth()->user()->role != 'admin') {
+            $laporan = Transaksi::where('id_user', auth()->user()->id)->orderBy('tgl','DESC')->get();
         } else {
-            if (auth()->user()->role != 'admin') {
-                $laporan = Transaksi::where('status','diambil')->where('id_user', auth()->user()->id)->orderBy('tgl','DESC')->get();
-            } else {
-                $laporan = Transaksi::where('status','diambil')->orderBy('tgl','DESC')->get();
-            }
+            $laporan = Transaksi::orderBy('tgl','DESC')->get();
         }
 
         $outlet = Outlet::orderBy('nama','ASC')->get();
 
         return view('laporan.index', compact('laporan','outlet'));
+    }
+
+    public function cari(Request $request)
+    {
+        $outlet = Outlet::orderBy('nama','ASC')->get();
+        
+        // Inisialisasi
+        $tgl = $request->q;
+        $bts = $request->s;
+        $ot = $request->o;
+        $sts = $request->st;
+
+        $cari = Transaksi::where('tgl','LIKE','%'.$tgl.'%')->where('batas_waktu','<=', $bts)->where('id_outlet','LIKE','%'.$ot.'%')->where('status','LIKE','%'.$sts.'%')->get();
+
+        return view('laporan.cari', compact('cari','outlet'));
     }
 
     // Export
@@ -110,5 +97,16 @@ class LaporanController extends Controller
 
         $pdf = PDF::loadView('laporan.pdf', ['jquin' => $laporan])->setPaper('a4', 'landscape')->setWarnings(false);
         return $pdf->download('Laporan Laundry '.$hari.$bulan.$tahun.'.pdf');
+    }
+
+    // Owner
+    public function laporanOwner()
+    {
+        $idO = Outlet_User::where('id_user', auth()->user()->id)->get('id_outlet');
+
+        $laporan = Transaksi::whereIn('id_outlet', $idO)->get();
+        $outlet = Outlet::orderBy('nama','ASC')->get();
+
+        return view('owner.laporan', compact('laporan', 'outlet'));
     }
 }

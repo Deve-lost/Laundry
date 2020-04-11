@@ -13,19 +13,11 @@
       <div class="card">
          <div class="card-head">
             <div class="card-header">
-               <h4 class="card-title">Laporan Keuangan Bulan - {{ $bulan }}</h4>
+               <h4 class="card-title">Laporan Bulan - {{ $bulan }}</h4>
                <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                <div class="heading-elements">
                   <span class="badge badge-info">{{ $tanggal }}</span>
                </div>
-            </div>
-            <div class="px-1">
-               <ul class="list-inline list-inline-pipe text-center p-1 border-bottom-grey border-bottom-lighten-3">
-                  <li>Project Owner: <span class="text-muted">Margaret Govan</span></li>
-                  <li>Start: <span class="text-muted">01/Feb/2016</span></li>
-                  <li>Due on: <span class="text-muted">01/Oct/2016</span></li>
-                  <li><a href="#" class="text-muted" data-toggle="tooltip" data-placement="bottom" title="Export as PDF"><i class="fa fa-file-pdf-o"></i></a></li>
-               </ul>
             </div>
          </div>
          <!-- project-info -->
@@ -35,13 +27,13 @@
             </div>
             <div class="project-info-count col-lg-4 col-md-12">
                <div class="project-info-icon">
-                  <h2>160</h2>
+                  <h2>{{ $laporan }}</h2>
                   <div class="project-info-sub-icon">
                      <span class="fa fa-calendar-check-o"></span>
                   </div>
                </div>
                <div class="project-info-text pt-1">
-                  <h5>Laporan Bulan Ini</h5>
+                  <h5>Total Laporan</h5>
                </div>
             </div>
             <div class="project-info-count col-lg-4 col-md-12">
@@ -51,43 +43,61 @@
          <!-- project-info -->
          <div class="card-body">
             <div class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1">
-               <span>-- Pilih Outlet --</span>
+               <span>Status Transaksi</span>
             </div>
-            <div class="row py-2">
-               <div class="col-lg-6 col-md-12">
-                  <div class="insights px-2">
-                     <div><span class="text-info h3">82%</span> <span class="float-right">Tasks</span></div>
-                     <div class="progress progress-md mt-1 mb-0">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 82%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                     </div>
+            <div class="row grouped-multiple-statistics-card">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-lg-6 col-xl-3 col-sm-6 col-12">
+                        <div class="d-flex align-items-start mb-sm-1 mb-xl-0 border-right-blue-grey border-right-lighten-5">
+                          <span class="card-icon primary d-flex justify-content-center mr-3">
+                            <i class="icon p-1 icon-note customize-icon font-large-2 p-1"></i>
+                          </span>
+                          <div class="stats-amount mr-3">
+                            <h3 class="heading-text text-bold-600">{{ $baru }}</h3>
+                            <p class="sub-heading">Baru</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-xl-3 col-sm-6 col-12">
+                        <div class="d-flex align-items-start mb-sm-1 mb-xl-0 border-right-blue-grey border-right-lighten-5">
+                          <span class="card-icon danger d-flex justify-content-center mr-3">
+                            <i class="icon p-1 icon-refresh customize-icon font-large-2 p-1"></i>
+                          </span>
+                          <div class="stats-amount mr-3">
+                            <h3 class="heading-text text-bold-600">{{ $proses }}</h3>
+                            <p class="sub-heading">Proses</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-xl-3 col-sm-6 col-12">
+                        <div class="d-flex align-items-start border-right-blue-grey border-right-lighten-5">
+                          <span class="card-icon success d-flex justify-content-center mr-3">
+                            <i class="icon p-1 icon-bag customize-icon font-large-2 p-1"></i>
+                          </span>
+                          <div class="stats-amount mr-3">
+                            <h3 class="heading-text text-bold-600">{{ $selesai }}</h3>
+                            <p class="sub-heading">Selesai</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-xl-3 col-sm-6 col-12">
+                        <div class="d-flex align-items-start">
+                          <span class="card-icon warning d-flex justify-content-center mr-3">
+                            <i class="icon p-1 icon-user-following customize-icon font-large-2 p-1"></i>
+                          </span>
+                          <div class="stats-amount mr-3">
+                            <h3 class="heading-text text-bold-600">{{ $diambil }}</h3>
+                            <p class="sub-heading">Diambil</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-               </div>
-               <div class="col-lg-6 col-md-12">
-                  <div class="insights px-2">
-                     <div><span class="text-success h3">78%</span> <span class="float-right">TaskLists</span></div>
-                     <div class="progress progress-md mt-1 mb-0">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 78%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="row py-2">
-               <div class="col-lg-6 col-md-12">
-                  <div class="insights px-2">
-                     <div><span class="text-warning h3">68%</span> <span class="float-right">Milestones</span></div>
-                     <div class="progress progress-md mt-1 mb-0">
-                        <div class="progress-bar bg-warning" role="progressbar" style="width: 68%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-lg-6 col-md-12">
-                  <div class="insights px-2">
-                     <div><span class="text-danger h3">62%</span> <span class="float-right">Bugs</span></div>
-                     <div class="progress progress-md mt-1 mb-0">
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: 62%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                     </div>
-                  </div>
-               </div>
+                </div>
+              </div>
             </div>
          </div>
       </div>

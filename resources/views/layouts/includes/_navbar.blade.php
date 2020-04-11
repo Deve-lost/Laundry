@@ -14,10 +14,10 @@
       <div class="collapse navbar-collapse" id="navbar-mobile">
         <ul class="nav navbar-nav mr-auto float-left">
           <li class="nav-item d-none d-md-block"><a class="nav-link nav-link-expand" href="#"><i class="icon-frame"></i></a></li>
-          <!-- Untuk Input search -->
+          <!-- Untuk Input search Coming Soon! >_!-->
         </ul>
         <ul class="nav navbar-nav float-right">
-          <li class="dropdown dropdown-notification nav-item"><a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i class="icon-bell"></i><span class="badge badge-pill badge-danger badge-up">1</span></a>
+          <!-- <li class="dropdown dropdown-notification nav-item"><a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i class="icon-bell"></i><span class="badge badge-pill badge-danger badge-up">1</span></a>
             <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
               <li class="dropdown-menu-header">
                 <h6 class="dropdown-header m-0"><span class="grey darken-2">Notifikasi</span><span class="notification-tag badge badge-danger float-right m-0">1 Baru</span></h6>
@@ -33,7 +33,7 @@
                   </div></a>
               <li class="dropdown-menu-footer"><a class="dropdown-item text-muted text-center" href="javascript:void(0)">Lihat Semua Notifikasi</a></li>
             </ul>
-          </li>
+          </li> -->
           <li class="dropdown dropdown-user nav-item">
             <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
               <span class="user-name" style="margin-top: 10px;">{{ auth()->user()->nama }}</span></a>

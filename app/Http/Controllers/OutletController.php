@@ -137,4 +137,26 @@ class OutletController extends Controller
             ->removeColumn('id') // Hapus id
             ->toJson();
     }
+
+
+    // Owner
+    // JSON
+    public function jsonOwner()
+    {
+        $outlet = DB::table('outlet_user')
+            ->join('tb_outlet', 'tb_outlet.id', '=', 'outlet_user.id_outlet')
+            ->select('outlet_user.id_user','tb_outlet.nama','tb_outlet.alamat','tb_outlet.tlp')
+            ->where('id_user', auth()->user()->id)
+            ->get();
+
+        return Datatables::of($outlet)
+            ->addIndexColumn() // Tambah no ++
+            ->removeColumn('id') // Hapus id
+            ->toJson();
+    }
+
+    public function owner()
+    {
+        return view('owner.outlet');
+    }
 }

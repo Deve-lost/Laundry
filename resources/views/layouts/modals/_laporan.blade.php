@@ -7,7 +7,8 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-        <form method="GET" action="{{ route('laporan.index') }}" novalidate>
+        <form method="POST" action="{{ route('laporan.cari') }}" novalidate>
+            @csrf
           <div class="modal-body">
                 <div class="row">
                     <div class="col-md-6">
@@ -42,7 +43,6 @@
                         <div class="form-group">
                             <label for="outlet">Outlet</label>
                             <select class="form-control" name="o" id="outlet">
-                                <option value="Semua">Semua</option>
                                 @foreach($outlet as $jquin)
                                 <option value="{{ $jquin->id }}">{{ $jquin->nama }}</option>
                                 @endforeach
@@ -54,7 +54,6 @@
                         <div class="form-group">
                             <label for="status">Status</label>
                             <select class="form-control" name="st" id="status">
-                                <option value="Semua">Semua</option>
                                 <option value="baru">Baru</option>
                                 <option value="proses">Proses</option>
                                 <option value="selesai">Selesai</option>

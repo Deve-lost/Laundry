@@ -49,6 +49,7 @@
 
     <!-- Modal Store -->
     @include('layouts.modals._paket')
+    @include('layouts.modals._updatepaket')
 @stop
 
 @section('footer')
@@ -68,7 +69,20 @@
     <script src="{{asset('admin/app-assets/js/scripts/extensions/sweet-alerts.min.js')}}"></script>
     <script src="{{asset('admin/app-assets/vendors/js/forms/select/select2.full.min.js')}}"></script>
     <script src="{{asset('admin/app-assets/vendors/js/extensions/toastr.min.js')}}"></script>
-        
+    
+    <!-- Alert -->
+    @if(Session::has('sudahada'))
+    <script>
+        toastr.error('Data sudah ada!','Error');
+    </script>
+    @endif
+
+     @if(Session::has('sukses'))
+    <script>
+        toastr.success('Data Berhasil Ditambahkan','Sukses');
+    </script>
+    @endif
+
     <script>
         $(".select2").select2();
     </script>
@@ -102,28 +116,22 @@
         }
 
         /////////////////
-        // Tambah Data //
+        // Update Data //
         /////////////////
         $(function () {
-             $('#form-cu form').on('submit', function (e) {
+             $('#form-update form').on('submit', function (e) {
                 if (!e.isDefaultPrevented()) {
                 var id = $('#id').val();
-                if (save_method == 'add') url = "{{ url('paket') }}";
-                else url = "{{ url('paket') . '/' }}" + id;
+                url = "{{ url('paket') . '/' }}" + id;
 
                     $.ajax({
                         url: url,
                         type: "POST",
-                        data: $("#form-cu form").serialize(),
+                        data: $("#form-update form").serialize(),
                         success: function($data) {
-                            $("#form-cu").modal('hide');
+                            $("#form-update").modal('hide');
                             table.ajax.reload();
-
-                            if (save_method == 'add') {
-                                toastr.success('Data Berhasil Ditambahkan','Sukses');
-                            } else {
-                                toastr.success('Data Berhasil Diperbharui','Sukses');
-                            }
+                            toastr.success('Data Berhasil Diperbharui','Sukses');
                         },
                         error: function () {
                             Swal.fire(
@@ -145,20 +153,20 @@
         function update(id) {
             save_method = "edit";
             $('input[name=_method]').val('PATCH');
-            $('#form-cu form')[0].reset();
+            $('#form-update form')[0].reset();
 
             $.ajax({
                 url: "{{ url('paket') }}" + '/' + id + '/edit',
                 type: "GET",
                 dataType: "JSON",
                 success: function (jquin) {
-                    $('#form-cu').modal('show');
+                    $('#form-update').modal('show');
                     $('.modal-title').text('Edit Paket');
 
                     $('#id').val(jquin.id);
-                    $('#namaPaket').val(jquin.nama_paket);
-                    $('#jenis').val(jquin.jenis);
-                    $('#harga').val(jquin.harga);
+                    $('#unamaPaket').val(jquin.nama_paket);
+                    $('#ujenis').val(jquin.jenis);
+                    $('#uharga').val(jquin.harga);
                 },
                 error : function () {
                     Swal.fire(

@@ -80,19 +80,19 @@
       <!-- Owner -->
       @if(auth()->user()->role == 'owner')
       <li class="nav-item active">
-            <a href="{{ route('kasir.dashboard') }}">
+            <a href="{{ route('owner.dashboard') }}">
                   <i class="icon-home"></i>
                   <span class="menu-title" data-i18n="Dashboard">Dashboard</span>
             </a>
       </li>
       <li class=" nav-item">
-            <a href="">
+            <a href="{{ route('owner.outelt') }}">
                   <i class="icon-layers"></i>
                   <span class="menu-title" data-i18n="Data Outlet">Data Outlet</span>
             </a>
       </li>
       <li class=" nav-item">
-            <a href="{{ route('laporan.index') }}">
+            <a href="{{ route('laporan.owner') }}">
                   <i class="icon-notebook"></i>
                   <span class="menu-title" data-i18n="Laporan">Laporan</span>
             </a>

@@ -29,14 +29,20 @@ class PaketController extends Controller
      */
     public function store(Request $request)
     {
-        $jquin = [
-            'id_outlet' => $request->id_outlet,
-            'nama_paket' => $request->nama_paket,
-            'jenis' => $request->jenis,
-            'harga' => $request->harga,
-        ];
+        if (Paket::where('id_outlet',$request->id_outlet)->where('jenis', $request->jenis)->exists()) {
+            return redirect()->back()->with('sudahada','');
+        } else {
+             $jquin = [
+                'id_outlet' => $request->id_outlet,
+                'nama_paket' => $request->nama_paket,
+                'jenis' => $request->jenis,
+                'harga' => $request->harga,
+            ];
 
-        return Paket::create($jquin);
+             Paket::create($jquin);
+ 
+             return redirect()->back()->with('sukses','');
+        }
     }
 
     /**

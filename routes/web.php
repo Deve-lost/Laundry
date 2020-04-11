@@ -86,6 +86,9 @@ Route::group(['middleware' => ['auth','checkRole:admin,kasir']], function (){
 	Route::get('json/cari-paket/{id}','TransaksiController@paket');	
 	Route::get('json/cari-jenis/{id}/{namaPaket}','TransaksiController@jenis');	
 	Route::get('json/cari-harga/{id}','TransaksiController@harga');
+
+	// Laporan
+	Route::get('laporan','LaporanController@index')->name('laporan.index');
 });
 
 Route::group(['middleware' => ['auth','checkRole:admin,kasir,owner']], function (){
@@ -95,8 +98,13 @@ Route::group(['middleware' => ['auth','checkRole:admin,kasir,owner']], function 
 		'as' => 'owner.dashboard'
 	]);
 
+	// Outlet
+	Route::get('owner/outelt', 'OutletController@owner')->name('owner.outelt');
+	Route::get('json/outlet/owner','OutletController@jsonOwner')->name('json.outlet.owner');
+
 	// Laporan
-	Route::get('laporan','LaporanController@index')->name('laporan.index');
+	Route::get('owner/laporan', 'LaporanController@laporanOwner')->name('laporan.owner');
+	Route::post('laporan/cari','LaporanController@cari')->name('laporan.cari');
 
 	// Export
 	Route::get('laporan/export-excel','LaporanController@exportExcel')->name('export.excel');

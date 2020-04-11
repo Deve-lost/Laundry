@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Outlet;
+use App\Outlet_User;
 use App\User;
 use App\Pelanggan;
 use App\Transaksi;
@@ -63,6 +64,18 @@ class DashboardController extends Controller
         $bulan = $bulanArray[date('m')];
         $tanggal = date('d').' '.(ucwords($bulanArray[date('m')])).' '.date('Y');
 
-		return view('dashboard.ownerDashboard', compact('bulan','tanggal'));
+        // Laporan
+        $idO = Outlet_User::where('id_user', auth()->user()->id)->get('id_outlet');
+        $m = date('Y-m');
+        $laporan = Transaksi::whereIn('id_outlet', $idO)->where('tgl', '>=', $m)->count();
+
+        // Count
+        $baru = Transaksi::whereIn('id_outlet', $idO)->where('status','baru')->count();
+        $proses = Transaksi::whereIn('id_outlet', $idO)->where('status','proses')->count();
+        $selesai = Transaksi::whereIn('id_outlet', $idO)->where('status','selesai')->count();
+        $diambil = Transaksi::whereIn('id_outlet', $idO)->where('status','diambil')->count();
+        
+
+		return view('dashboard.ownerDashboard', compact('bulan','tanggal','laporan','baru','proses','selesai','diambil'));
 	}
 }
